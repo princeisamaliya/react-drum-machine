@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 
-const bankOne = [
+const keys = [
   {
     keyCode: 81,
     keyTrigger: "Q",
@@ -57,28 +57,28 @@ const bankOne = [
   }
 ];
 
-class DrumPad extends React.Component {
+class App extends Component {
   constructor(props) {
     super(props);
-    this.playSound = this.playSound.bind(this);
+    this.handleClick = this.handleClick.bind(this);
   }
-  playSound(e) {}
-  render() {
-    return (
-      <div onClick={this.playSound} className="drum-pad">
-        {console.log(this.bankOne.keyCode)}
-      </div>
-    );
-  }
-}
 
-class App extends Component {
+  handleClick(event) {}
   render() {
     return (
       <div id="drum-machine" className="inner-container">
         <div id="display" />
-
-        <DrumPad />
+        {keys.map(key => (
+          <button
+            className="drum-pad"
+            id={key.id}
+            key={key.keyTrigger}
+            onClick={this.handleClick}
+          >
+            <audio className="clip" id={key.keyTrigger} src={key.clip} />
+            {key.keyTrigger}
+          </button>
+        ))}
       </div>
     );
   }
