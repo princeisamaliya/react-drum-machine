@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 
-const keys = [
+const bankOne = [
   {
     keyCode: 81,
     keyTrigger: "Q",
@@ -57,31 +57,53 @@ const keys = [
   }
 ];
 
-class App extends Component {
+class DrumPad extends React.Component {
   constructor(props) {
     super(props);
-    this.handleClick = this.handleClick.bind(this);
+    this.handleKeyPress = this.handleKeyPress.bind(this);
   }
+  handleKeyPress(e) {
+   
+  }
+  render() {
+    return (
+      <div id={this.props.id} 
+          className="drum-pad" >
+          <audio className='clip'
+           id={this.props.keyTrigger} 
+           src={this.props.clip}></audio>
+          {this.props.keyTrigger}
+      </div>
+    )
+  }
+}
 
-  handleClick(event) {}
+
+class PadBank extends React.Component {
+  constructor(props) {
+    super(props);
+  }
+  render() {
+    let padBank;
+    return (      
+      <DrumPad />      
+    )
+  }
+}
+
+class App extends Component {  
+  constructor(props) {
+    super(props);
+    this.state = {
+      currentPadBank: bankOne,
+    }
+  }
   render() {
     return (
       <div id="drum-machine" className="inner-container">
-        <div id="display" />
-        {keys.map(key => (
-          <button
-            className="drum-pad"
-            id={key.id}
-            key={key.keyTrigger}
-            onClick={this.handleClick}
-          >
-            <audio className="clip" id={key.keyTrigger} src={key.url} />
-            {key.keyTrigger}
-          </button>
-        ))}
+       <PadBank />
       </div>
     );
   }
 }
-
 export default App;
