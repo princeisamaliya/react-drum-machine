@@ -75,7 +75,7 @@ class App extends Component {
             key={key.keyTrigger}
             onClick={this.handleClick}
           >
-            <audio className="clip" id={key.keyTrigger} src={key.clip} />
+            <audio className="clip" id={key.keyTrigger} src={key.url} />
             {key.keyTrigger}
           </button>
         ))}
