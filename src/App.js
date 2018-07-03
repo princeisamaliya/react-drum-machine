@@ -89,6 +89,7 @@ class PadBank extends React.Component {
     padBank = this.props.currentPadBank.map((drumObj, i, padBankArr) => {
       return (
         <DrumPad
+          key={padBankArr[i].id}
           clipId={padBankArr[i].id}
           clip={padBankArr[i].url}
           keyTrigger={padBankArr[i].keyTrigger}
@@ -111,11 +112,7 @@ class App extends React.Component {
   render() {
     return (
       <div id="drum-machine" className="inner-container">
-        <PadBank
-          power={this.state.power}
-          clipVolume={this.state.sliderVal}
-          currentPadBank={this.state.currentPadBank}
-        />
+        <PadBank currentPadBank={this.state.currentPadBank} />
       </div>
     );
   }
