@@ -62,22 +62,23 @@ class DrumPad extends React.Component {
     super(props);
     this.handleKeyPress = this.handleKeyPress.bind(this);
   }
-  handleKeyPress(e) {
-   
-  }
+
+  handleKeyPress(e) {}
+
+  playSound(e) {}
   render() {
     return (
-      <div id={this.props.id} 
-          className="drum-pad" >
-          <audio className='clip'
-           id={this.props.keyTrigger} 
-           src={this.props.clip}></audio>
-          {this.props.keyTrigger}
+      <div id={this.props.clipId} onClick={this.playSound} className="drum-pad">
+        <audio
+          className="clip"
+          id={this.props.keyTrigger}
+          src={this.props.clip}
+        />
+        {this.props.keyTrigger}
       </div>
-    )
+    );
   }
 }
-
 
 class PadBank extends React.Component {
   constructor(props) {
@@ -85,23 +86,36 @@ class PadBank extends React.Component {
   }
   render() {
     let padBank;
-    return (      
-      <DrumPad />      
-    )
+    padBank = this.props.currentPadBank.map((drumObj, i, padBankArr) => {
+      return (
+        <DrumPad
+          clipId={padBankArr[i].id}
+          clip={padBankArr[i].url}
+          keyTrigger={padBankArr[i].keyTrigger}
+          keyCode={padBankArr[i].keyCode}
+        />
+      );
+    });
+    return <div className="pad-bank">{padBank}</div>;
   }
 }
 
-class App extends Component {  
+class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      currentPadBank: bankOne,
-    }
+      currentPadBank: bankOne
+    };
   }
+
   render() {
     return (
       <div id="drum-machine" className="inner-container">
-       <PadBank />
+        <PadBank
+          power={this.state.power}
+          clipVolume={this.state.sliderVal}
+          currentPadBank={this.state.currentPadBank}
+        />
       </div>
     );
   }
