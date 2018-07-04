@@ -61,11 +61,27 @@ class DrumPad extends React.Component {
   constructor(props) {
     super(props);
     this.handleKeyPress = this.handleKeyPress.bind(this);
+    this.playSound = this.playSound.bind(this);
+  }
+  componentDidMount() {
+    document.addEventListener('keydown', this.handleKeyPress);
+  }
+  componentWillUnmount() {
+    document.removeEventListener('keydown', this.handleKeyPress);
+  }
+  handleKeyPress(e) {
+    console.log(e.keyCode)
+    if (e.keyCode === this.props.keyCode) {
+      this.playSound();
+    }
   }
 
-  handleKeyPress(e) {}
+  playSound(props) {
+    const sound = document.getElementById(this.props.keyTrigger);
+    sound.currentTime = 0;
+    sound.play();
+  }
 
-  playSound(e) {}
   render() {
     return (
       <div id={this.props.clipId} onClick={this.playSound} className="drum-pad">
