@@ -64,13 +64,12 @@ class DrumPad extends React.Component {
     this.playSound = this.playSound.bind(this);
   }
   componentDidMount() {
-    document.addEventListener('keydown', this.handleKeyPress);
+    document.addEventListener("keydown", this.handleKeyPress);
   }
   componentWillUnmount() {
-    document.removeEventListener('keydown', this.handleKeyPress);
+    document.removeEventListener("keydown", this.handleKeyPress);
   }
   handleKeyPress(e) {
-    console.log(e.keyCode)
     if (e.keyCode === this.props.keyCode) {
       this.playSound();
     }
@@ -80,6 +79,7 @@ class DrumPad extends React.Component {
     const sound = document.getElementById(this.props.keyTrigger);
     sound.currentTime = 0;
     sound.play();
+    document.getElementById("display").innerText = this.props.clipId;
   }
 
   render() {
@@ -128,6 +128,7 @@ class App extends React.Component {
   render() {
     return (
       <div id="drum-machine" className="inner-container">
+        <div id="display">{this.state.displayName}</div>
         <PadBank currentPadBank={this.state.currentPadBank} />
       </div>
     );
