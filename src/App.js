@@ -56,12 +56,22 @@ const bankOne = [
     url: "https://s3.amazonaws.com/freecodecamp/drums/Cev_H2.mp3"
   }
 ];
+const activeStyle = {
+  backgroundColor: "orange"
+};
 
+const inactiveStyle = {
+  backgroundColor: "white"
+};
 class DrumPad extends React.Component {
   constructor(props) {
     super(props);
+    this.state = {
+      padStyle: inactiveStyle
+    };
     this.handleKeyPress = this.handleKeyPress.bind(this);
     this.playSound = this.playSound.bind(this);
+    this.activatePad = this.activatePad.bind(this);
   }
   componentDidMount() {
     document.addEventListener("keydown", this.handleKeyPress);
@@ -74,17 +84,32 @@ class DrumPad extends React.Component {
       this.playSound();
     }
   }
-
+  activatePad() {
+    this.state.padStyle.backgroundColor === "orange"
+      ? this.setState({
+          padStyle: inactiveStyle
+        })
+      : this.setState({
+          padStyle: activeStyle
+        });
+  }
   playSound(props) {
     const sound = document.getElementById(this.props.keyTrigger);
     sound.currentTime = 0;
     sound.play();
+    this.activatePad();
+    setTimeout(() => this.activatePad(), 100);
     document.getElementById("display").innerText = this.props.clipId;
   }
 
   render() {
     return (
-      <div id={this.props.clipId} onClick={this.playSound} className="drum-pad">
+      <div
+        id={this.props.clipId}
+        onClick={this.playSound}
+        className="drum-pad"
+        style={this.state.padStyle}
+      >
         <audio
           className="clip"
           id={this.props.keyTrigger}
@@ -108,6 +133,7 @@ class PadBank extends React.Component {
           key={padBankArr[i].id}
           clipId={padBankArr[i].id}
           clip={padBankArr[i].url}
+          bhf
           keyTrigger={padBankArr[i].keyTrigger}
           keyCode={padBankArr[i].keyCode}
         />
