@@ -60,6 +60,8 @@ const activeStyle = {
   backgroundColor: "orange"
 };
 
+const power = { isToggleOn: true };
+
 const inactiveStyle = {
   backgroundColor: "white"
 };
@@ -67,7 +69,8 @@ class DrumPad extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      padStyle: inactiveStyle
+      padStyle: inactiveStyle,
+      powerBtn: power
     };
     this.handleKeyPress = this.handleKeyPress.bind(this);
     this.playSound = this.playSound.bind(this);
@@ -133,7 +136,6 @@ class PadBank extends React.Component {
           key={padBankArr[i].id}
           clipId={padBankArr[i].id}
           clip={padBankArr[i].url}
-          bhf
           keyTrigger={padBankArr[i].keyTrigger}
           keyCode={padBankArr[i].keyCode}
         />
@@ -149,11 +151,20 @@ class App extends React.Component {
     this.state = {
       currentPadBank: bankOne
     };
+    this.handleChange = this.handleChange.bind(this);
   }
-
+  handleChange() {
+    this.setState(prevState => ({
+      isToggleOn: !prevState.isToggleOn
+    }));
+    console.log(this.props.powerBtn);
+  }
   render() {
     return (
       <div id="drum-machine" className="inner-container">
+        <button onClick={this.handleChange}>
+          {this.state.isToggleOn ? "ON" : "OFF"}
+        </button>
         <div id="display">{this.state.displayName}</div>
         <PadBank currentPadBank={this.state.currentPadBank} />
       </div>
