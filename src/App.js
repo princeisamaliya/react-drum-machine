@@ -60,17 +60,15 @@ const activeStyle = {
   backgroundColor: "orange"
 };
 
-const power = { isToggleOn: true };
-
 const inactiveStyle = {
   backgroundColor: "white"
 };
+
 class DrumPad extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      padStyle: inactiveStyle,
-      powerBtn: power
+      padStyle: inactiveStyle
     };
     this.handleKeyPress = this.handleKeyPress.bind(this);
     this.playSound = this.playSound.bind(this);
@@ -88,21 +86,25 @@ class DrumPad extends React.Component {
     }
   }
   activatePad() {
-    this.state.padStyle.backgroundColor === "orange"
-      ? this.setState({
-          padStyle: inactiveStyle
-        })
-      : this.setState({
-          padStyle: activeStyle
-        });
+    if (this.props.power) {
+      this.state.padStyle.backgroundColor === "orange"
+        ? this.setState({
+            padStyle: inactiveStyle
+          })
+        : this.setState({
+            padStyle: activeStyle
+          });
+    }
   }
   playSound(props) {
-    const sound = document.getElementById(this.props.keyTrigger);
-    sound.currentTime = 0;
-    sound.play();
-    this.activatePad();
-    setTimeout(() => this.activatePad(), 100);
-    document.getElementById("display").innerText = this.props.clipId;
+    if (this.props.power) {
+      const sound = document.getElementById(this.props.keyTrigger);
+      sound.currentTime = 0;
+      sound.play();
+      this.activatePad();
+      setTimeout(() => this.activatePad(), 100);
+      document.getElementById("display").innerText = this.props.clipId;
+    }
   }
 
   render() {
@@ -138,6 +140,7 @@ class PadBank extends React.Component {
           clip={padBankArr[i].url}
           keyTrigger={padBankArr[i].keyTrigger}
           keyCode={padBankArr[i].keyCode}
+          power={this.props.power}
         />
       );
     });
@@ -149,24 +152,28 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      currentPadBank: bankOne
+      currentPadBank: bankOne,
+      power: true
     };
     this.handleChange = this.handleChange.bind(this);
   }
+
   handleChange() {
-    this.setState(prevState => ({
-      isToggleOn: !prevState.isToggleOn
-    }));
-    console.log(this.props.powerBtn);
+    this.state.power
+      ? this.setState({ power: false })
+      : this.setState({ power: true });
   }
   render() {
     return (
       <div id="drum-machine" className="inner-container">
         <button onClick={this.handleChange}>
-          {this.state.isToggleOn ? "ON" : "OFF"}
+          {this.state.power ? "ON" : "OFF"}
         </button>
         <div id="display">{this.state.displayName}</div>
-        <PadBank currentPadBank={this.state.currentPadBank} />
+        <PadBank
+          power={this.state.power}
+          currentPadBank={this.state.currentPadBank}
+        />
       </div>
     );
   }
